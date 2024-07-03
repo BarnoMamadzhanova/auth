@@ -18,16 +18,15 @@ html {
 @font-face {
   font-family: "MPLUS";
   font-weight: 400;
-  src: local("MPLUS Regular"),
-    url(../fonts/MPlus/MPLUS1p-Regular.ttf) format("truetype");
+  src: local("MPLUS"),
+    url(../fonts/MPLUS/MPLUS1p-Regular.ttf) format("truetype");
 }
 
 /* Medium */
 @font-face {
   font-family: "MPLUS";
   font-weight: 500;
-  src: local("MPLUS Medium"),
-    url(../fonts/MPlus/MPLUS1p-Medium.ttf) format("truetype");
+  src: local("MPLUS"), url(../fonts/MPLUS/MPLUS1p-Medium.ttf) format("truetype");
 }
 
 /* Media query for max-width 1100px */

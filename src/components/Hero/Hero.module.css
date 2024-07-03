@@ -1,0 +1,24 @@
+.hero {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2.5rem;
+}
+
+.info__box {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+}
+
+.info__box h2 {
+  font-size: 3rem;
+  font-weight: 500;
+}
+
+.info__box p {
+  font-size: 1.75rem;
+  font-weight: 400;
+}
