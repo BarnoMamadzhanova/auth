@@ -1,25 +1,38 @@
 import { useFormik } from "formik";
 import classes from "./LoginForm.module.css";
 import React from "react";
+import { loginSchema } from "../../schemas/login";
 // import visible from "../../assets/eye.svg";
 
+const onSubmit = () => {
+  console.log("submitted");
+};
+
 function LoginForm() {
-  const { values, handleBlur, handleChange } = useFormik({
+  const { values, errors, handleBlur, handleChange, handleSubmit } = useFormik({
     initialValues: {
-      userLogin: "",
+      username: "",
       password: "",
     },
+    validationSchema: loginSchema,
+    onSubmit,
   });
+
+  console.log(errors);
 
   return (
     <div className={classes.loginContainer}>
       <h3 className={classes.loginFormTitle}>Вэлком бэк!</h3>
-      <form className={classes.loginForm} autoComplete="off">
+      <form
+        onSubmit={handleSubmit}
+        className={classes.loginForm}
+        autoComplete="off"
+      >
         <input
           value={values.userLogin}
           onChange={handleChange}
           type="text"
-          id="userLogin"
+          id="username"
           placeholder="Введи логин"
           onBlur={handleBlur}
         />
