@@ -1,0 +1,7 @@
+.login {
+  padding: 11rem;
+  display: flex;
+  flex-basis: 50%;
+  align-items: center;
+  justify-content: center;
+}

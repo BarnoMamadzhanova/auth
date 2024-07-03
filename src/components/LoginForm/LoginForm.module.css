@@ -1,0 +1,21 @@
+.loginContainer {
+  padding: 0 11rem 0 11rem;
+  display: flex;
+  flex-direction: column;
+  gap: 3rem;
+}
+
+.loginFormTitle {
+  font-size: 2rem;
+  font-weight: 500;
+}
+
+.loginForm {
+  display: flex;
+  flex-direction: column;
+  gap: 0.875rem;
+}
+
+.loginFormText {
+  font-weight: 500;
+}
