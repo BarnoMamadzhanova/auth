@@ -1,14 +1,18 @@
+import React, { useState } from "react";
 import { useFormik } from "formik";
-import classes from "./LoginForm.module.css";
-import React from "react";
 import { loginSchema } from "../../schemas/login";
-// import visible from "../../assets/eye.svg";
+import classes from "./LoginForm.module.css";
+import invisible from "../../assets/eye.svg";
+import visible from "../../assets/invisible.svg";
 
 const onSubmit = () => {
   console.log("submitted");
 };
 
 function LoginForm() {
+  const [passwordVisible, setPasswordVisible] = useState(false);
+  const [formError, setFormError] = useState("");
+
   const { values, errors, handleBlur, handleChange, handleSubmit } = useFormik({
     initialValues: {
       username: "",
@@ -16,34 +20,70 @@ function LoginForm() {
     },
     validationSchema: loginSchema,
     onSubmit,
+    validateOnChange: false,
+    validateOnBlur: false,
   });
 
-  console.log(errors);
+  const togglePasswordVisibility = () => {
+    setPasswordVisible(!passwordVisible);
+  };
+
+  const handleFormSubmit = (e) => {
+    e.preventDefault();
+    handleSubmit();
+
+    if (Object.keys(errors).length > 0) {
+      setFormError("Неверный логин или пароль");
+    } else {
+      setFormError("");
+    }
+  };
 
   return (
     <div className={classes.loginContainer}>
       <h3 className={classes.loginFormTitle}>Вэлком бэк!</h3>
+      {formError && <div className={classes.formErrorMessage}>{formError}</div>}
       <form
-        onSubmit={handleSubmit}
+        onSubmit={handleFormSubmit}
         className={classes.loginForm}
         autoComplete="off"
       >
-        <input
-          value={values.userLogin}
-          onChange={handleChange}
-          type="text"
-          id="username"
-          placeholder="Введи логин"
-          onBlur={handleBlur}
-        />
-        <input
-          value={values.password}
-          onChange={handleChange}
-          type="password"
-          id="password"
-          placeholder="Введи пароль"
-          onBlur={handleBlur}
-        />
+        <div
+          className={`${classes.inputContainer} ${
+            errors.username ? classes.error : ""
+          }`}
+        >
+          <input
+            value={values.username}
+            onChange={handleChange}
+            type="text"
+            id="username"
+            placeholder="Введи логин"
+            onBlur={handleBlur}
+          />
+        </div>
+
+        <div
+          className={`${classes.inputContainer} ${
+            errors.password ? classes.error : ""
+          }`}
+        >
+          <input
+            value={values.password}
+            onChange={handleChange}
+            type={passwordVisible ? "text" : "password"}
+            id="password"
+            placeholder="Введи пароль"
+            onBlur={handleBlur}
+          />
+          <img
+            src={passwordVisible ? visible : invisible}
+            alt="Toggle visibility"
+            className={classes.passwordToggleIcon}
+            onClick={togglePasswordVisibility}
+          />
+        </div>
+
         <button type="submit">Войти</button>
       </form>
       <p className={classes.loginFormText}>У меня еще нет аккаунта</p>

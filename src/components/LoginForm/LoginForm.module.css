@@ -19,15 +19,16 @@
 }
 
 .loginForm input {
-  padding: 0.875rem 0 0.875rem 1rem;
   font-size: 1rem;
   font-weight: 500;
   outline: none;
   border: none;
-  border-radius: 12px;
-  background-color: #f8f8f8;
   line-height: 1.5rem;
+  background-color: #f8f8f8;
+  flex-grow: 1;
+  padding: 0.875rem 0 0.875rem 1rem;
   color: #767676;
+  border-radius: 12px;
 }
 
 .loginForm button {
@@ -48,6 +49,27 @@
   opacity: 0.8;
 }
 
+.inputContainer {
+  display: flex;
+  align-items: center;
+  position: relative;
+  background-color: #f8f8f8;
+  border-radius: 12px;
+  padding-right: 2.5rem;
+}
+
+.inputContainer.error {
+  border: 2px solid red;
+}
+
+.passwordToggleIcon {
+  position: absolute;
+  right: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  cursor: pointer;
+}
+
 .loginFormText {
   font-weight: 500;
   line-height: 1.5rem;
@@ -66,4 +88,16 @@
   bottom: -2px;
   height: 2px;
   background-color: currentColor;
+}
+
+.formErrorMessage {
+  color: red;
+  margin-bottom: 1rem;
+  padding: 0.875rem 1rem 0.875rem 1rem;
+  font-size: 1rem;
+  font-weight: 500;
+  line-height: 1.5rem;
+  border: 2px solid red;
+  border-radius: 12px;
+  width: 21.5rem;
 }
