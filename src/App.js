@@ -1,7 +1,10 @@
+import { Hero } from "./components/Hero/Hero";
+import "./styles/App.css";
+
 function App() {
   return (
     <div className="App">
-      <p>App page!</p>
+      <Hero />
     </div>
   );
 }
