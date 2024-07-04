@@ -1,5 +1,4 @@
 .loginContainer {
-  padding: 0 11rem 0 11rem;
   display: flex;
   flex-direction: column;
   gap: 3rem;
@@ -71,6 +70,8 @@
 }
 
 .loginFormText {
+  text-decoration: none;
+  color: #292929;
   font-weight: 500;
   line-height: 1.5rem;
   position: relative;

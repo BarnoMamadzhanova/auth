@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { Link } from "react-router-dom";
 import { useFormik } from "formik";
 import { loginSchema } from "../../schemas/login";
 import classes from "./LoginForm.module.css";
@@ -86,7 +87,9 @@ function LoginForm() {
 
         <button type="submit">Войти</button>
       </form>
-      <p className={classes.loginFormText}>У меня еще нет аккаунта</p>
+      <Link to="/registration" className={classes.loginFormText}>
+        У меня еще нет аккаунта
+      </Link>
     </div>
   );
 }
