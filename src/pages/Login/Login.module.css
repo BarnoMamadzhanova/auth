@@ -1,7 +1,6 @@
 .login {
+  padding-block: 11rem;
   display: flex;
-  flex-basis: 50%;
   align-items: center;
   justify-content: center;
-  gap: 10rem;
 }

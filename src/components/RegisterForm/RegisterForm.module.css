@@ -1,0 +1,137 @@
+.backLink {
+  text-decoration: none;
+  color: #292929;
+  font-weight: 500;
+  line-height: 1.5rem;
+  display: flex;
+  flex-direction: row;
+  gap: 0.75rem;
+  align-items: center;
+  justify-content: center;
+  padding: 0.875rem 1rem 0.875rem 1rem;
+  border-radius: 12px;
+  color: #292929;
+  position: absolute;
+  left: 1.75rem;
+  top: 2rem;
+}
+
+.registerContainer {
+  flex: 1 1 50%;
+  display: flex;
+  flex-direction: column;
+  gap: 3rem;
+  align-items: center;
+}
+
+.registerFormTitle {
+  font-size: 2rem;
+  font-weight: 500;
+}
+
+.registerForm {
+  display: flex;
+  flex-direction: column;
+  gap: 0.875rem;
+  width: 21.5rem;
+}
+
+.registerForm input {
+  font-size: 1rem;
+  font-weight: 500;
+  outline: none;
+  border: none;
+  line-height: 1.5rem;
+  background-color: #f8f8f8;
+  flex-grow: 1;
+  padding: 0.875rem 0 0.875rem 1rem;
+  color: #767676;
+  border-radius: 12px;
+}
+
+.registerForm button {
+  padding: 0.875rem 1rem 0.875rem 1rem;
+  font-size: 1rem;
+  font-weight: 500;
+  line-height: 1.5rem;
+  outline: none;
+  border: none;
+  border-radius: 12px;
+  background: #292929;
+  color: #f8f8f8;
+  margin-top: 2.125rem;
+  cursor: pointer;
+}
+
+.registerForm button:hover {
+  opacity: 0.8;
+}
+
+.registerForm button:disabled {
+  background: #d7d7d7;
+  cursor: not-allowed;
+}
+
+.inputContainer {
+  display: flex;
+  align-items: center;
+  position: relative;
+  background-color: #f8f8f8;
+  border-radius: 12px;
+  padding-right: 2.5rem;
+}
+
+.inputContainer.error {
+  color: red;
+}
+
+.inputError {
+  border-color: red;
+  background-color: #ffe5e5;
+}
+
+.passwordToggleIcon {
+  position: absolute;
+  right: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  cursor: pointer;
+}
+
+.validation {
+  padding-left: 1rem;
+  color: #767676;
+}
+
+.validation li {
+  display: flex;
+  align-items: center;
+  /* gap: 0.5rem; */
+  color: #767676;
+}
+
+.validation li img {
+  margin-right: 0.5rem;
+}
+
+.valid {
+  color: green;
+}
+
+.invalid {
+  color: red;
+}
+
+/* .validation li.valid {
+  color: green;
+}
+
+.validation li.invalid {
+  color: red;
+} */
+
+.errorMessage {
+  color: red;
+  font-size: 1rem;
+  margin-top: 0.25rem;
+}

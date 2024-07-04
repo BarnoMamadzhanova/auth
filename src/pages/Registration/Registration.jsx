@@ -1,9 +1,13 @@
 import React from "react";
+import classes from "./Registration.module.css";
+import { Hero } from "../../components/Hero/Hero";
+import RegisterForm from "../../components/RegisterForm/RegisterForm";
 
 function Registration() {
   return (
-    <div>
-      <p>Registration page!</p>
+    <div className={classes.registration}>
+      <Hero />
+      <RegisterForm />
     </div>
   );
 }
