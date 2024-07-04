@@ -85,7 +85,9 @@ function LoginForm() {
           />
         </div>
 
-        <button type="submit">Войти</button>
+        <button type="submit" onSubmit={handleFormSubmit}>
+          Войти
+        </button>
       </form>
       <Link to="/registration" className={classes.loginFormText}>
         У меня еще нет аккаунта

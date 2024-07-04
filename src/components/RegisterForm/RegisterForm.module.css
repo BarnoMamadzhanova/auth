@@ -106,8 +106,7 @@
 .validation li {
   display: flex;
   align-items: center;
-  /* gap: 0.5rem; */
-  color: #767676;
+  color: inherit;
 }
 
 .validation li img {
@@ -121,14 +120,6 @@
 .invalid {
   color: red;
 }
-
-/* .validation li.valid {
-  color: green;
-}
-
-.validation li.invalid {
-  color: red;
-} */
 
 .errorMessage {
   color: red;

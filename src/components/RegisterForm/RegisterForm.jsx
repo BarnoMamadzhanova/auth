@@ -9,29 +9,31 @@ import back from "../../assets/backArrow.svg";
 import done from "../../assets/done.svg";
 import wrong from "../../assets/wrong.svg";
 
-const onSubmit = () => {
+const onSubmit = (values, actions) => {
   console.log("submitted");
+  console.log(values);
+  console.log(actions);
+  actions.resetForm();
 };
 
 function RegisterForm() {
   const [passwordVisible, setPasswordVisible] = useState(false);
-  const [submitted, setSubmitted] = useState(false);
 
-  const { values, errors, touched, handleBlur, handleChange } = useFormik({
-    initialValues: {
-      email: "",
-      username: "",
-      password: "",
-      confirmPassword: "",
-    },
-    validationSchema: registerSchema,
-    onSubmit: (values) => {
-      setSubmitted(true);
-      onSubmit(values);
-    },
-    validateOnChange: false,
-    validateOnBlur: false,
-  });
+  const { values, errors, touched, handleBlur, handleChange, handleSubmit } =
+    useFormik({
+      initialValues: {
+        email: "",
+        username: "",
+        password: "",
+        confirmPassword: "",
+      },
+      validationSchema: registerSchema,
+      onSubmit,
+      validateOnChange: false,
+      validateOnBlur: false,
+    });
+
+  console.log(errors);
 
   const togglePasswordVisibility = () => {
     setPasswordVisible(!passwordVisible);
@@ -41,10 +43,14 @@ function RegisterForm() {
     length: values.password.length >= 8 && values.password.length <= 15,
     letters: /(?=.*[a-z])(?=.*[A-Z])/.test(values.password),
     number: /(?=.*\d)/.test(values.password),
-    specialChar: /(?=.*[@$!%*?&#])/.test(values.password),
+    specialChar: /(?=.*[@$!%*?&#])[A-Za-z\d@$!%*?&#]+$/.test(values.password),
   };
 
-  const allValid = Object.values(passwordValidation).every(Boolean);
+  const allValid =
+    passwordValidation.length &&
+    passwordValidation.letters &&
+    passwordValidation.number &&
+    passwordValidation.specialChar;
 
   return (
     <>
@@ -55,7 +61,7 @@ function RegisterForm() {
       <div className={classes.registerContainer}>
         <h3 className={classes.registerFormTitle}>Создать аккаунт Lorby</h3>
         <form
-          onSubmit={onSubmit}
+          onSubmit={handleSubmit}
           className={classes.registerForm}
           autoComplete="off"
         >
@@ -76,6 +82,9 @@ function RegisterForm() {
               }
             />
           </div>
+          {errors.email && touched.email && (
+            <div className={classes.errorMessage}>{errors.email}</div>
+          )}
 
           <div
             className={`${classes.inputContainer} ${
@@ -93,10 +102,10 @@ function RegisterForm() {
                 errors.username && touched.username ? classes.inputError : ""
               }
             />
-            {errors.username && touched.username && (
-              <div className={classes.errorMessage}>{errors.username}</div>
-            )}
           </div>
+          {errors.username && touched.username && (
+            <div className={classes.errorMessage}>{errors.username}</div>
+          )}
 
           <div
             className={`${classes.inputContainer} ${
@@ -121,82 +130,17 @@ function RegisterForm() {
               onClick={togglePasswordVisibility}
             />
           </div>
+          {errors.password && touched.password && (
+            <div className={classes.errorMessage}>{errors.password}</div>
+          )}
 
-          <ul
-            className={`${classes.validation} ${
-              passwordValidation.length &&
-              passwordValidation.letters &&
-              passwordValidation.number &&
-              passwordValidation.specialChar
-                ? classes.valid
-                : submitted &&
-                  !passwordValidation.length &&
-                  !passwordValidation.letters &&
-                  !passwordValidation.number &&
-                  !passwordValidation.specialChar
-                ? classes.invalid
-                : ""
-            }`}
-          >
-            <li
-            //   className={
-            //     passwordValidation.length
-            //       ? classes.valid
-            //       : submitted && !passwordValidation.length
-            //       ? classes.invalid
-            //       : ""
-            //   }
-            >
-              {passwordValidation.length ? (
+          <ul className={classes.validation}>
+            <li className={allValid ? classes.valid : classes.invalid}>
+              {allValid ? (
                 <img src={done} alt="done" />
-              ) : submitted ? (
+              ) : (
                 <img src={wrong} alt="wrong" />
-              ) : null}
-            </li>
-            <li
-            //   className={
-            //     passwordValidation.letters
-            //       ? classes.valid
-            //       : submitted && !passwordValidation.letters
-            //       ? classes.invalid
-            //       : ""
-            //   }
-            >
-              {passwordValidation.letters ? (
-                <img src={done} alt="done" />
-              ) : submitted ? (
-                <img src={wrong} alt="wrong" />
-              ) : null}
-            </li>
-            <li
-            //   className={
-            //     passwordValidation.number
-            //       ? classes.valid
-            //       : submitted && !passwordValidation.number
-            //       ? classes.invalid
-            //       : ""
-            //   }
-            >
-              {passwordValidation.number ? (
-                <img src={done} alt="done" />
-              ) : submitted ? (
-                <img src={wrong} alt="wrong" />
-              ) : null}
-            </li>
-            <li
-            //   className={
-            //     passwordValidation.specialChar
-            //       ? classes.valid
-            //       : submitted && !passwordValidation.specialChar
-            //       ? classes.invalid
-            //       : ""
-            //   }
-            >
-              {passwordValidation.specialChar ? (
-                <img src={done} alt="done" />
-              ) : submitted ? (
-                <img src={wrong} alt="wrong" />
-              ) : null}
+              )}
             </li>
           </ul>
 
@@ -231,7 +175,7 @@ function RegisterForm() {
             <div className={classes.errorMessage}>{errors.confirmPassword}</div>
           )}
 
-          <button type="submit" disabled={!allValid} onSubmit={onSubmit}>
+          <button type="submit" disabled={!allValid} onSubmit={handleSubmit}>
             Далее
           </button>
         </form>

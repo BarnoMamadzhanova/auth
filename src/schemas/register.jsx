@@ -20,9 +20,12 @@ export const registerSchema = yup.object().shape({
     .required("Required"),
   password: yup
     .string()
-    .min(8)
-    .max(15)
-    .matches(passwordPattern)
+    .min(8, "Пароль должен содержать не менее 8 символов")
+    .max(15, "Пароль должен содержать не более 15 символов")
+    .matches(
+      passwordPattern,
+      "Пароль должен содержать минимум одну строчную и одну прописную букву, цифру и спецсимвол"
+    )
     .required("Required"),
   confirmPassword: yup
     .string()
