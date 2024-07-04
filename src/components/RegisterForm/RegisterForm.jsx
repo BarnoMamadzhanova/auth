@@ -44,11 +44,13 @@ function RegisterForm() {
     specialChar: /(?=.*[@$!%*?&#])[A-Za-z\d@$!%*?&#]+$/.test(values.password),
   };
 
-  const allValid =
-    passwordValidation.length &&
-    passwordValidation.letters &&
-    passwordValidation.number &&
-    passwordValidation.specialChar;
+  console.log(errors);
+
+  // const allValid =
+  //   passwordValidation.length &&
+  //   passwordValidation.letters &&
+  //   passwordValidation.number &&
+  //   passwordValidation.specialChar;
 
   return (
     <>
@@ -133,12 +135,33 @@ function RegisterForm() {
           )}
 
           <ul className={classes.validation}>
-            <li className={allValid ? classes.valid : classes.invalid}>
-              {allValid ? (
-                <img src={done} alt="done" />
-              ) : (
-                <img src={wrong} alt="wrong" />
-              )}
+            <li
+              className={
+                passwordValidation.length ? classes.valid : classes.invalid
+              }
+            >
+              От 8 до 15 символов
+            </li>
+            <li
+              className={
+                passwordValidation.letters ? classes.valid : classes.invalid
+              }
+            >
+              Строчные и прописные буквы
+            </li>
+            <li
+              className={
+                passwordValidation.number ? classes.valid : classes.invalid
+              }
+            >
+              Минимум 1 цифра
+            </li>
+            <li
+              className={
+                passwordValidation.specialChar ? classes.valid : classes.invalid
+              }
+            >
+              Минимум 1 спецсимвол (!, ", #, $...)
             </li>
           </ul>
 
@@ -173,7 +196,7 @@ function RegisterForm() {
             <div className={classes.errorMessage}>{errors.confirmPassword}</div>
           )}
 
-          <button type="submit" disabled={!allValid} onSubmit={handleSubmit}>
+          <button type="submit" onSubmit={handleSubmit}>
             Далее
           </button>
         </form>

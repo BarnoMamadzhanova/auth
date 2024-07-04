@@ -32,11 +32,13 @@ function LoginForm() {
   const handleFormSubmit = (e) => {
     e.preventDefault();
     handleSubmit();
+    console.log(errors);
 
     if (Object.keys(errors).length > 0) {
       setFormError("Неверный логин или пароль");
     } else {
       setFormError("");
+      console.log(123);
     }
   };
 

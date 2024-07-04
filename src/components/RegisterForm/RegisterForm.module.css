@@ -109,6 +109,10 @@
   color: inherit;
 }
 
+.validation li::after {
+  /* content: "12"; */
+}
+
 .validation li img {
   margin-right: 0.5rem;
 }
@@ -117,8 +121,16 @@
   color: green;
 }
 
+.valid::after {
+  content: "✅";
+}
+
 .invalid {
   color: red;
+}
+
+.invalid::after {
+  content: "❌";
 }
 
 .errorMessage {
