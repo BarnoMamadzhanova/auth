@@ -6,8 +6,6 @@ import classes from "./RegisterForm.module.css";
 import invisible from "../../assets/eye.svg";
 import visible from "../../assets/invisible.svg";
 import back from "../../assets/backArrow.svg";
-import done from "../../assets/done.svg";
-import wrong from "../../assets/wrong.svg";
 
 const onSubmit = (values, actions) => {
   console.log("submitted");
@@ -19,19 +17,26 @@ const onSubmit = (values, actions) => {
 function RegisterForm() {
   const [passwordVisible, setPasswordVisible] = useState(false);
 
-  const { values, errors, touched, handleBlur, handleChange, handleSubmit } =
-    useFormik({
-      initialValues: {
-        email: "",
-        username: "",
-        password: "",
-        confirmPassword: "",
-      },
-      validationSchema: registerSchema,
-      onSubmit,
-      validateOnChange: false,
-      validateOnBlur: false,
-    });
+  const {
+    values,
+    errors,
+    isSubmitting,
+    touched,
+    handleBlur,
+    handleChange,
+    handleSubmit,
+  } = useFormik({
+    initialValues: {
+      email: "",
+      username: "",
+      password: "",
+      confirmPassword: "",
+    },
+    validationSchema: registerSchema,
+    onSubmit,
+    validateOnChange: false,
+    validateOnBlur: false,
+  });
 
   const togglePasswordVisibility = () => {
     setPasswordVisible(!passwordVisible);
@@ -43,14 +48,6 @@ function RegisterForm() {
     number: /(?=.*\d)/.test(values.password),
     specialChar: /(?=.*[@$!%*?&#])[A-Za-z\d@$!%*?&#]+$/.test(values.password),
   };
-
-  console.log(errors);
-
-  // const allValid =
-  //   passwordValidation.length &&
-  //   passwordValidation.letters &&
-  //   passwordValidation.number &&
-  //   passwordValidation.specialChar;
 
   return (
     <>
@@ -196,7 +193,11 @@ function RegisterForm() {
             <div className={classes.errorMessage}>{errors.confirmPassword}</div>
           )}
 
-          <button type="submit" onSubmit={handleSubmit}>
+          <button
+            type="submit"
+            onSubmit={handleSubmit}
+            // disabled={!isSubmitting}
+          >
             Далее
           </button>
         </form>

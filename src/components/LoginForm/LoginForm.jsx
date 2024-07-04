@@ -14,31 +14,33 @@ function LoginForm() {
   const [passwordVisible, setPasswordVisible] = useState(false);
   const [formError, setFormError] = useState("");
 
-  const { values, errors, handleBlur, handleChange, handleSubmit } = useFormik({
+  const formik = useFormik({
     initialValues: {
       username: "",
       password: "",
     },
     validationSchema: loginSchema,
     onSubmit,
-    validateOnChange: false,
-    validateOnBlur: false,
+    validateOnChange: true,
+    validateOnBlur: true,
   });
+
+  const { values, errors, touched, handleBlur, handleChange, handleSubmit } =
+    formik;
 
   const togglePasswordVisibility = () => {
     setPasswordVisible(!passwordVisible);
   };
 
-  const handleFormSubmit = (e) => {
+  const handleFormSubmit = async (e) => {
     e.preventDefault();
-    handleSubmit();
-    console.log(errors);
+    await formik.validateForm();
 
-    if (Object.keys(errors).length > 0) {
+    if (Object.keys(formik.errors).length > 0) {
       setFormError("Неверный логин или пароль");
     } else {
       setFormError("");
-      console.log(123);
+      handleSubmit();
     }
   };
 
@@ -53,7 +55,7 @@ function LoginForm() {
       >
         <div
           className={`${classes.inputContainer} ${
-            errors.username ? classes.error : ""
+            errors.username && touched.username ? classes.error : ""
           }`}
         >
           <input
@@ -68,7 +70,7 @@ function LoginForm() {
 
         <div
           className={`${classes.inputContainer} ${
-            errors.password ? classes.error : ""
+            errors.password && touched.password ? classes.error : ""
           }`}
         >
           <input

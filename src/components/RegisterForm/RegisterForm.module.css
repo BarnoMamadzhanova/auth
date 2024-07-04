@@ -81,13 +81,14 @@
   padding-right: 2.5rem;
 }
 
-.inputContainer.error {
+.inputContainer.error input {
   color: red;
 }
 
 .inputError {
   border-color: red;
   background-color: #ffe5e5;
+  color: red;
 }
 
 .passwordToggleIcon {
@@ -109,14 +110,6 @@
   color: inherit;
 }
 
-.validation li::after {
-  /* content: "12"; */
-}
-
-.validation li img {
-  margin-right: 0.5rem;
-}
-
 .valid {
   color: green;
 }
@@ -134,6 +127,7 @@
 }
 
 .errorMessage {
+  padding-left: 1rem;
   color: red;
   font-size: 1rem;
   margin-top: 0.25rem;
