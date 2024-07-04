@@ -33,8 +33,6 @@ function RegisterForm() {
       validateOnBlur: false,
     });
 
-  console.log(errors);
-
   const togglePasswordVisibility = () => {
     setPasswordVisible(!passwordVisible);
   };
