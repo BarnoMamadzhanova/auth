@@ -6,37 +6,36 @@ import classes from "./RegisterForm.module.css";
 import invisible from "../../assets/eye.svg";
 import visible from "../../assets/invisible.svg";
 import back from "../../assets/backArrow.svg";
+import { useAppDispatch, useAppSelector } from "../../store/main";
+import { registerUser } from "../../store/auth/authReducer";
 
-const onSubmit = (values, actions) => {
-  console.log("submitted");
-  console.log(values);
-  console.log(actions);
-  actions.resetForm();
-};
+// const onSubmit = (values, actions) => {
+//   console.log("submitted");
+//   console.log(values);
+//   console.log(actions);
+//   actions.resetForm();
+// };
 
 function RegisterForm() {
   const [passwordVisible, setPasswordVisible] = useState(false);
+  const dispatch = useAppDispatch();
+  const { isLoading, error } = useAppSelector((state) => state.auth);
 
-  const {
-    values,
-    errors,
-    isSubmitting,
-    touched,
-    handleBlur,
-    handleChange,
-    handleSubmit,
-  } = useFormik({
-    initialValues: {
-      email: "",
-      username: "",
-      password: "",
-      confirmPassword: "",
-    },
-    validationSchema: registerSchema,
-    onSubmit,
-    validateOnChange: false,
-    validateOnBlur: false,
-  });
+  const { values, errors, touched, handleBlur, handleChange, handleSubmit } =
+    useFormik({
+      initialValues: {
+        email: "",
+        username: "",
+        password: "",
+        confirmPassword: "",
+      },
+      validationSchema: registerSchema,
+      onSubmit: (values) => {
+        dispatch(registerUser(values));
+      },
+      validateOnChange: false,
+      validateOnBlur: false,
+    });
 
   const togglePasswordVisibility = () => {
     setPasswordVisible(!passwordVisible);
@@ -193,13 +192,10 @@ function RegisterForm() {
             <div className={classes.errorMessage}>{errors.confirmPassword}</div>
           )}
 
-          <button
-            type="submit"
-            onSubmit={handleSubmit}
-            // disabled={!isSubmitting}
-          >
+          <button type="submit" onSubmit={handleSubmit} disabled={isLoading}>
             Далее
           </button>
+          {error && <div className={classes.errorMessage}>{error}</div>}
         </form>
       </div>
     </>

@@ -9,3 +9,11 @@ export interface ILoginResponse {
   accessToken: string;
   refreshToken: string;
 }
+
+//  Register
+export interface IRegisterRequest {
+  email: string;
+  username: string;
+  password: string;
+  confirmPassword: string;
+}

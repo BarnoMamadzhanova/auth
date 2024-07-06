@@ -1,95 +1,77 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-
+import { AppThunk, RootState } from "../main";
+import { IRegisterRequest } from "../../api/auth/types";
+import { register } from "../../api/auth/register";
 export interface AuthState {
-  authData: {
-    accessToken: string | null;
-    isLoading: boolean;
-    error: string | null;
-  };
-  profileData: {
-    profile: string | null;
-    isLoading: boolean;
-    error: string | null;
-  };
+  accessToken: string | null;
+  isLoading: boolean;
+  error: string | null;
 }
 
 const initialState: AuthState = {
-  authData: {
-    accessToken: null,
-    isLoading: false,
-    error: null,
-  },
-  profileData: {
-    profile: null,
-    isLoading: false,
-    error: null,
-  },
+  accessToken: null,
+  isLoading: false,
+  error: null,
 };
 
 export const authReducer = createSlice({
   name: "auth",
   initialState,
   reducers: {
-    loginStart: (state): AuthState => ({
-      ...state,
-      authData: {
-        ...state.authData,
-        isLoading: true,
-      },
-    }),
-    loginSuccess: (state, action: PayloadAction<string>): AuthState => ({
-      ...state,
-      authData: {
-        ...state.authData,
-        accessToken: action.payload,
-        isLoading: false,
-        error: null,
-      },
-    }),
-    loginFailure: (state, action: PayloadAction<string>): AuthState => ({
-      ...state,
-      authData: {
-        ...state.authData,
-        isLoading: false,
-        error: action.payload,
-      },
-    }),
-    loadProfileStart: (state): AuthState => ({
-      ...state,
-      profileData: {
-        ...state.profileData,
-        isLoading: true,
-      },
-    }),
-    loadProfileSucess: (state, action: PayloadAction<string>): AuthState => ({
-      ...state,
-      profileData: {
-        ...state.profileData,
-        profile: action.payload,
-        isLoading: false,
-        error: null,
-      },
-    }),
-    loadProfileFailure: (state, action: PayloadAction<string>): AuthState => ({
-      ...state,
-      profileData: {
-        ...state.profileData,
-        isLoading: false,
-        error: action.payload,
-      },
-    }),
-    logoutSuccess: (): AuthState => initialState,
+    registerStart(state) {
+      state.isLoading = true;
+      state.error = null;
+    },
+    registerSuccess(state) {
+      state.isLoading = false;
+      state.error = null;
+    },
+    registerFailure(state, action: PayloadAction<string>) {
+      state.isLoading = false;
+      state.error = action.payload;
+    },
+    loginStart: (state) => {
+      state.isLoading = true;
+    },
+    loginSuccess: (state, action: PayloadAction<string>) => {
+      state.accessToken = action.payload;
+      state.isLoading = false;
+      state.error = null;
+    },
+    loginFailure: (state, action: PayloadAction<string>) => {
+      state.isLoading = false;
+      state.error = action.payload;
+    },
+    logoutSuccess: (state) => {
+      state.accessToken = null;
+      state.isLoading = false;
+      state.error = null;
+    },
   },
 });
 
 export const {
-  loadProfileStart,
-  loadProfileSucess,
-  loadProfileFailure,
+  registerStart,
+  registerSuccess,
+  registerFailure,
   loginStart,
   loginSuccess,
   loginFailure,
   logoutSuccess,
 } = authReducer.actions;
+
+export const registerUser =
+  (data: IRegisterRequest): AppThunk =>
+  async (dispatch) => {
+    try {
+      dispatch(registerStart());
+      await register(data);
+      dispatch(registerSuccess());
+    } catch (error: any) {
+      dispatch(registerFailure(error.message));
+    }
+  };
+
+export const selectAuthState = (state: RootState) => state.auth;
 
 export default authReducer.reducer;
