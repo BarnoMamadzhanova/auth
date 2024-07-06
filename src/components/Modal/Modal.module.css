@@ -19,10 +19,10 @@
 }
 
 .modal__content {
-  padding: 2.5rem;
-  border-radius: 3rem;
+  padding: 2rem;
+  border-radius: 2rem;
   background-color: white;
-  width: 38rem;
+  width: 23.5rem;
   transform: scale(0.5);
   transition: 0.4s all;
 }
