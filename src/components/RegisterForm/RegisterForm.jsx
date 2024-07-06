@@ -21,8 +21,27 @@ function RegisterForm() {
         confirmPassword: "",
       },
       validationSchema: registerSchema,
+      // onSubmit: (values, actions) => {
+      //   dispatch(registerUser(values));
+      //   actions.resetForm();
+      // },
       onSubmit: (values, actions) => {
-        dispatch(registerUser(values));
+        // Simulate form submission
+        console.log("submitted");
+        console.log(values);
+        console.log(actions);
+
+        // Simulate API call delay
+        setTimeout(() => {
+          // Simulate success or error response from API
+          const success = true;
+          if (success) {
+            console.log("Registration successful");
+          } else {
+            console.log("Registration failed");
+          }
+        }, 1000);
+
         actions.resetForm();
       },
       validateOnChange: false,
