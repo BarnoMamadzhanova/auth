@@ -15,19 +15,19 @@ html {
 }
 
 /* Regular */
-@font-face {
+/* @font-face {
   font-family: "MPLUS";
   font-weight: 400;
   src: local("MPLUS"),
     url(../fonts/MPLUS/MPLUS1p-Regular.ttf) format("truetype");
-}
+} */
 
 /* Medium */
-@font-face {
+/* @font-face {
   font-family: "MPLUS";
   font-weight: 500;
   src: local("MPLUS"), url(../fonts/MPLUS/MPLUS1p-Medium.ttf) format("truetype");
-}
+} */
 
 /* Media query for max-width 1100px */
 /* @media (max-width: 1100px) {
