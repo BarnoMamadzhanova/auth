@@ -1,21 +1,16 @@
 import { Dispatch } from "@reduxjs/toolkit";
 import { ILoginRequest } from "../../api/auth/types";
-import { loginFailure, loginStart, loginSucess } from "./authReducer";
-import api from "../../api";
+import { loginFailure, loginStart, loginSuccess } from "./authReducer";
+import { login } from "../../api/auth";
 
 export const loginUser =
-  (data: ILoginRequest) =>
-  async (dispatch: Dispatch): Promise<void> => {
+  (data: ILoginRequest) => async (dispatch: Dispatch) => {
     try {
       dispatch(loginStart());
-
-      const res = await api.auth.login(data);
-
-      dispatch(loginSucess(res.data.accessToken));
-      // dispatch(getProfile())
-    } catch (e: any) {
-      console.error(e);
-
-      dispatch(loginFailure(e.message));
+      const response = await login(data);
+      dispatch(loginSuccess(response.data.accessToken));
+    } catch (error: any) {
+      console.error(error);
+      dispatch(loginFailure(error.message));
     }
   };

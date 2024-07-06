@@ -37,7 +37,7 @@ export const authReducer = createSlice({
         isLoading: true,
       },
     }),
-    loginSucess: (state, action: PayloadAction<string>): AuthState => ({
+    loginSuccess: (state, action: PayloadAction<string>): AuthState => ({
       ...state,
       authData: {
         ...state.authData,
@@ -87,7 +87,7 @@ export const {
   loadProfileSucess,
   loadProfileFailure,
   loginStart,
-  loginSucess,
+  loginSuccess,
   loginFailure,
   logoutSuccess,
 } = authReducer.actions;
