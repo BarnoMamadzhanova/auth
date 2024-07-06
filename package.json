@@ -30,8 +30,7 @@
     "test": "react-scripts test",
     "eject": "react-scripts eject"
   },
-   "proxy": "https://auth-project-production-d0e6.up.railway.app",
-
+  "proxy": "https://auth-project-production-d0e6.up.railway.app",
   "eslintConfig": {
     "extends": [
       "react-app",
