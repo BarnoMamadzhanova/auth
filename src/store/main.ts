@@ -1,5 +1,5 @@
 import { configureStore } from "@reduxjs/toolkit";
-import { useDispatch, UseDispatch } from "react-redux";
+import { useDispatch } from "react-redux";
 import logger from "redux-logger";
 import authReducer from "./auth/authReducer";
 
