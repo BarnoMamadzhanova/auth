@@ -1,0 +1,48 @@
+.profile {
+  padding-block: 11rem;
+  display: flex;
+  flex-direction: column;
+  gap: 2.5rem;
+  align-items: center;
+}
+
+.profileInfo {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.profileTitle {
+  font-size: 2.25rem;
+  font-weight: 500;
+}
+
+.profileText {
+  font-size: 1.25rem;
+  font-weight: 400;
+}
+
+/* .profileImg{} */
+
+.profileLink {
+  text-decoration: none;
+  font-size: 1rem;
+  font-weight: 500;
+  color: #292929;
+  line-height: 1.5rem;
+  position: relative;
+}
+
+.profileLink:hover {
+  cursor: pointer;
+}
+
+.profileLink:hover::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: -2px;
+  height: 2px;
+  background-color: currentColor;
+}
