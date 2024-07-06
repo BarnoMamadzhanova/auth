@@ -1,4 +1,9 @@
-import { createSlice, PayloadAction } from "@reduxjs/toolkit";
+import {
+  createSlice,
+  PayloadAction,
+  createAsyncThunk,
+  SerializedError,
+} from "@reduxjs/toolkit";
 import { AppThunk, RootState } from "../main";
 import { IRegisterRequest } from "../../api/auth/types";
 import { register } from "../../api/auth/register";
@@ -13,6 +18,18 @@ const initialState: AuthState = {
   isLoading: false,
   error: null,
 };
+
+// const registerFetch = createAsyncThunk(
+//   "auth/registerFetch",
+//   async (data: IRegisterRequest, thunkAPI) => {
+//     try {
+//       const response = await register(data);
+//       return response.data;
+//     } catch (error: any) {
+//       return thunkAPI.rejectWithValue(error.response.data as string);
+//     }
+//   }
+// );
 
 export const authReducer = createSlice({
   name: "auth",
@@ -48,6 +65,21 @@ export const authReducer = createSlice({
       state.error = null;
     },
   },
+  // extraReducers: (builder) => {
+  //   // Add reducers for additional action types here, and handle loading state as needed
+  //   builder.addCase(registerFetch.pending, (state, action) => {
+  //     state.isLoading = true;
+  //     state.error = null;
+  //   });
+  //   builder.addCase(registerFetch.fulfilled, (state, action) => {
+  //     state.isLoading = false;
+  //     state.error = null;
+  //   });
+  //   builder.addCase(registerFetch.rejected, (state, action) => {
+  //     state.isLoading = false;
+  //     state.error = action.payload;
+  //   });
+  // },
 });
 
 export const {

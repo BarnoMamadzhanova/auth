@@ -1,5 +1,3 @@
-//register
-
 import { axiosInstance } from "../instance";
 import { IRegisterRequest } from "./types";
 
