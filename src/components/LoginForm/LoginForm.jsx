@@ -115,7 +115,7 @@ import { loginSchema } from "../../schemas/login";
 import classes from "./LoginForm.module.css";
 import invisible from "../../assets/eye.svg";
 import visible from "../../assets/invisible.svg";
-import { useAppDispatch } from "../../store";
+import { useAppDispatch } from "../../store/main";
 import { loginUser } from "../../store/auth/actionCreators";
 
 function LoginForm() {
