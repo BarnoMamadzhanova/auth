@@ -17,3 +17,9 @@ export interface IRegisterRequest {
   password: string;
   confirmPassword: string;
 }
+
+//  Resend Confirmation
+export interface IResendConfirmationRequest {
+  username: string;
+  email: string;
+}

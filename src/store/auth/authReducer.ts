@@ -1,7 +1,11 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { AppThunk, RootState } from "../main";
-import { IRegisterRequest, ILoginRequest } from "../../api/auth/types";
-import { register, login } from "../../api/auth/index";
+import {
+  IRegisterRequest,
+  ILoginRequest,
+  IResendConfirmationRequest,
+} from "../../api/auth/types";
+import { register, login, resendConfirmation } from "../../api/auth/index";
 import { Dispatch } from "@reduxjs/toolkit";
 export interface AuthState {
   accessToken: string | null;
@@ -14,18 +18,6 @@ const initialState: AuthState = {
   isLoading: false,
   error: null,
 };
-
-// const registerFetch = createAsyncThunk(
-//   "auth/registerFetch",
-//   async (data: IRegisterRequest, thunkAPI) => {
-//     try {
-//       const response = await register(data);
-//       return response.data;
-//     } catch (error: any) {
-//       return thunkAPI.rejectWithValue(error.response.data as string);
-//     }
-//   }
-// );
 
 export const authReducer = createSlice({
   name: "auth",
@@ -60,22 +52,18 @@ export const authReducer = createSlice({
       state.isLoading = false;
       state.error = null;
     },
+    resendConfirmationStart: (state) => {
+      state.isLoading = true;
+    },
+    resendConfirmationSuccess: (state) => {
+      state.isLoading = false;
+      state.error = null;
+    },
+    resendConfirmationFailure: (state, action: PayloadAction<string>) => {
+      state.isLoading = false;
+      state.error = action.payload;
+    },
   },
-  // extraReducers: (builder) => {
-  //   // Add reducers for additional action types here, and handle loading state as needed
-  //   builder.addCase(registerFetch.pending, (state, action) => {
-  //     state.isLoading = true;
-  //     state.error = null;
-  //   });
-  //   builder.addCase(registerFetch.fulfilled, (state, action) => {
-  //     state.isLoading = false;
-  //     state.error = null;
-  //   });
-  //   builder.addCase(registerFetch.rejected, (state, action) => {
-  //     state.isLoading = false;
-  //     state.error = action.payload;
-  //   });
-  // },
 });
 
 export const {
@@ -86,6 +74,9 @@ export const {
   loginSuccess,
   loginFailure,
   logoutSuccess,
+  resendConfirmationStart,
+  resendConfirmationSuccess,
+  resendConfirmationFailure,
 } = authReducer.actions;
 
 export const registerUser =
@@ -112,6 +103,46 @@ export const loginUser =
     }
   };
 
+export const resendConfirmationEmail =
+  (data: IResendConfirmationRequest) => async (dispatch: Dispatch) => {
+    try {
+      dispatch(resendConfirmationStart());
+      await resendConfirmation(data);
+      dispatch(resendConfirmationSuccess());
+    } catch (error: any) {
+      console.error(error);
+      dispatch(resendConfirmationFailure(error.message));
+    }
+  };
+
 export const selectAuthState = (state: RootState) => state.auth;
 
 export default authReducer.reducer;
+
+// const registerFetch = createAsyncThunk(
+//   "auth/registerFetch",
+//   async (data: IRegisterRequest, thunkAPI) => {
+//     try {
+//       const response = await register(data);
+//       return response.data;
+//     } catch (error: any) {
+//       return thunkAPI.rejectWithValue(error.response.data as string);
+//     }
+//   }
+// );
+
+// extraReducers: (builder) => {
+//   // Add reducers for additional action types here, and handle loading state as needed
+//   builder.addCase(registerFetch.pending, (state, action) => {
+//     state.isLoading = true;
+//     state.error = null;
+//   });
+//   builder.addCase(registerFetch.fulfilled, (state, action) => {
+//     state.isLoading = false;
+//     state.error = null;
+//   });
+//   builder.addCase(registerFetch.rejected, (state, action) => {
+//     state.isLoading = false;
+//     state.error = action.payload;
+//   });
+// },

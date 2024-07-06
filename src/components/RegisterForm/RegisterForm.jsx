@@ -7,13 +7,6 @@ import { invisible, visible, back } from "../../assets";
 import { useAppDispatch, useAppSelector } from "../../store/main";
 import { registerUser } from "../../store/auth/authReducer";
 
-// const onSubmit = (values, actions) => {
-//   console.log("submitted");
-//   console.log(values);
-//   console.log(actions);
-//   actions.resetForm();
-// };
-
 function RegisterForm() {
   const [passwordVisible, setPasswordVisible] = useState(false);
   const dispatch = useAppDispatch();
@@ -28,8 +21,9 @@ function RegisterForm() {
         confirmPassword: "",
       },
       validationSchema: registerSchema,
-      onSubmit: (values) => {
+      onSubmit: (values, actions) => {
         dispatch(registerUser(values));
+        actions.resetForm();
       },
       validateOnChange: false,
       validateOnBlur: false,

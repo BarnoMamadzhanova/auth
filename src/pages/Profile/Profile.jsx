@@ -2,6 +2,7 @@ import React from "react";
 import classes from "./Profile.module.css";
 import { hero } from "../../assets";
 import { Link } from "react-router-dom";
+// import Modal from "../../components/Modal/Modal";
 
 function Profile() {
   return (

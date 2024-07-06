@@ -1,25 +1,47 @@
 import React from "react";
 import { Link } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
 import { useFormik } from "formik";
 import classes from "./ConfirmationForm.module.css";
 import { confirmSchema } from "../../schemas/confirm";
 import { back } from "../../assets";
+import {
+  resendConfirmationEmail,
+  selectAuthState,
+} from "../../store/auth/authReducer";
 
-const onSubmit = (values, actions) => {
-  console.log("submitted");
-  console.log(values);
-  console.log(actions);
-  actions.resetForm();
-};
+function ConfirmationForm({ onSubmitSuccess, onSubmitError }) {
+  const dispatch = useDispatch();
+  const { isLoading, error } = useSelector(selectAuthState);
 
-function ConfirmationForm() {
   const formik = useFormik({
     initialValues: {
       username: "",
       email: "",
     },
     validationSchema: confirmSchema,
-    onSubmit,
+    // onSubmit: async (values, actions) => {
+    //   try {
+    //     await dispatch(resendConfirmationEmail(values));
+    //     onSubmitSuccess();
+    //   } catch {
+    //     onSubmitError();
+    //   }
+    //   actions.resetForm();
+    // },
+    onSubmit: (values, actions) => {
+      console.log("submitted");
+      console.log(values);
+      console.log(actions);
+
+      // Simulate success
+      onSubmitSuccess();
+
+      // Simulate error (uncomment to test error case)
+      // onSubmitError();
+
+      actions.resetForm();
+    },
     validateOnChange: true,
     validateOnBlur: true,
   });
@@ -78,8 +100,9 @@ function ConfirmationForm() {
           <div className={classes.errorMessage}>{errors.email}</div>
         )}
         <button onSubmit={handleSubmit} type="submit">
-          Письмо не пришло
+          {isLoading ? "Отправка..." : "Письмо не пришло"}
         </button>
+        {error && <div className={classes.errorMessage}>{error}</div>}
       </form>
       <Link to="/" className={classes.confirmLink}>
         Авторизоваться
