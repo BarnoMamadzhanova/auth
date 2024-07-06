@@ -3,9 +3,7 @@ import { Link } from "react-router-dom";
 import { useFormik } from "formik";
 import { registerSchema } from "../../schemas/register";
 import classes from "./RegisterForm.module.css";
-import invisible from "../../assets/eye.svg";
-import visible from "../../assets/invisible.svg";
-import back from "../../assets/backArrow.svg";
+import { invisible, visible, back } from "../../assets";
 import { useAppDispatch, useAppSelector } from "../../store/main";
 import { registerUser } from "../../store/auth/authReducer";
 

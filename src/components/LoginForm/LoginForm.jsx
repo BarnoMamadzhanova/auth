@@ -3,8 +3,7 @@ import { Link } from "react-router-dom";
 import { useFormik } from "formik";
 import { loginSchema } from "../../schemas/login";
 import classes from "./LoginForm.module.css";
-import invisible from "../../assets/eye.svg";
-import visible from "../../assets/invisible.svg";
+import { visible, invisible } from "../../assets";
 import { useAppDispatch } from "../../store/main";
 import { loginUser } from "../../store/auth/authReducer";
 

@@ -1,5 +1,5 @@
 import classes from "./Hero.module.css";
-import hero from "../../assets/hero.svg";
+import { hero } from "../../assets";
 
 export const Hero = () => {
   return (
