@@ -6,7 +6,7 @@ import classes from "./LoginForm.module.css";
 import invisible from "../../assets/eye.svg";
 import visible from "../../assets/invisible.svg";
 import { useAppDispatch } from "../../store/main";
-import { loginUser } from "../../store/auth/actionCreators";
+import { loginUser } from "../../store/auth/authReducer";
 
 function LoginForm() {
   const [passwordVisible, setPasswordVisible] = useState(false);

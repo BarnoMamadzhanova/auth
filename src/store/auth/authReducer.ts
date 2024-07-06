@@ -1,12 +1,8 @@
-import {
-  createSlice,
-  PayloadAction,
-  createAsyncThunk,
-  SerializedError,
-} from "@reduxjs/toolkit";
+import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { AppThunk, RootState } from "../main";
-import { IRegisterRequest } from "../../api/auth/types";
-import { register } from "../../api/auth/register";
+import { IRegisterRequest, ILoginRequest } from "../../api/auth/types";
+import { register, login } from "../../api/auth/index";
+import { Dispatch } from "@reduxjs/toolkit";
 export interface AuthState {
   accessToken: string | null;
   isLoading: boolean;
@@ -101,6 +97,18 @@ export const registerUser =
       dispatch(registerSuccess());
     } catch (error: any) {
       dispatch(registerFailure(error.message));
+    }
+  };
+
+export const loginUser =
+  (data: ILoginRequest) => async (dispatch: Dispatch) => {
+    try {
+      dispatch(loginStart());
+      const response = await login(data);
+      dispatch(loginSuccess(response.data.accessToken));
+    } catch (error: any) {
+      console.error(error);
+      dispatch(loginFailure(error.message));
     }
   };
 

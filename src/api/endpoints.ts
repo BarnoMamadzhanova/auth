@@ -1,11 +1,11 @@
 const Endpoints = {
   AUTH: {
-    LOGIN: "/api/auth/login",
-    REFRESH: "/api/auth/refresh-token",
-    REGISTER: "/api/auth/register",
-    RESEND_CONFIRMATION: "/api/auth/resend-confirmation",
-    CONFIRM: "/api/auth/confirm",
-    LOGOUT: "/api/auth/logout",
+    LOGIN: "/auth/login",
+    REFRESH: "/auth/refresh-token",
+    REGISTER: "/auth/register",
+    RESEND_CONFIRMATION: "/auth/resend-confirmation",
+    CONFIRM: "/auth/confirm",
+    LOGOUT: "/auth/logout",
   },
 };
 
