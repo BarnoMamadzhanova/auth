@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useFormik } from "formik";
 import { loginSchema } from "../../schemas/login";
 import classes from "./LoginForm.module.css";
@@ -10,8 +10,8 @@ import { loginUser } from "../../store/auth/authReducer";
 function LoginForm() {
   const [passwordVisible, setPasswordVisible] = useState(false);
   const [formError, setFormError] = useState("");
-
   const dispatch = useAppDispatch();
+  const navigate = useNavigate();
 
   const formik = useFormik({
     initialValues: {
@@ -19,52 +19,43 @@ function LoginForm() {
       password: "",
     },
     validationSchema: loginSchema,
-    onSubmit: async (values, { setSubmitting }) => {
-      try {
-        await dispatch(loginUser(values));
-        setFormError("");
-      } catch (e) {
-        setFormError(e.response?.data?.message || "Неверный логин или пароль");
-      } finally {
-        setSubmitting(false);
-      }
-    },
     validateOnChange: true,
     validateOnBlur: true,
   });
 
-  const {
-    values,
-    errors,
-    touched,
-    handleBlur,
-    handleChange,
-    handleSubmit,
-    isSubmitting,
-  } = formik;
+  const { values, errors, touched, handleBlur, handleChange, isSubmitting } =
+    formik;
 
   const togglePasswordVisibility = () => {
     setPasswordVisible(!passwordVisible);
   };
 
-  // const handleFormSubmit = async (e) => {
-  //   e.preventDefault();
-  //   await formik.validateForm();
+  const handleFormSubmit = async (e) => {
+    e.preventDefault();
+    await formik.validateForm();
 
-  //   if (Object.keys(formik.errors).length > 0) {
-  //     setFormError("Неверный логин или пароль");
-  //   } else {
-  //     setFormError("");
-  //     handleSubmit(e);
-  //   }
-  // };
+    if (Object.keys(formik.errors).length > 0) {
+      setFormError("Неверный логин или пароль");
+    } else {
+      try {
+        console.log("Form submitted with values:", values);
+        // await dispatch(loginUser(values));
+        setFormError("");
+        formik.resetForm();
+        navigate("/profile");
+      } catch (error) {
+        console.error("Login error:", error);
+        setFormError("Что-то пошло не так. Пожалуйста, попробуйте снова.");
+      }
+    }
+  };
 
   return (
     <div className={classes.loginContainer}>
       <h3 className={classes.loginFormTitle}>Вэлком бэк!</h3>
       {formError && <div className={classes.formErrorMessage}>{formError}</div>}
       <form
-        onSubmit={handleSubmit}
+        onSubmit={handleFormSubmit}
         className={classes.loginForm}
         autoComplete="off"
       >
@@ -104,7 +95,11 @@ function LoginForm() {
           />
         </div>
 
-        <button type="submit" disabled={isSubmitting} onSubmit={handleSubmit}>
+        <button
+          type="submit"
+          disabled={isSubmitting}
+          onSubmit={handleFormSubmit}
+        >
           Войти
         </button>
       </form>

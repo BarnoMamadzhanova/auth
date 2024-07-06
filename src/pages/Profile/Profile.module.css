@@ -15,10 +15,12 @@
 .profileTitle {
   font-size: 2.25rem;
   font-weight: 500;
+  line-height: 2.5rem;
 }
 
 .profileText {
   font-size: 1.25rem;
+  line-height: 1.5rem;
   font-weight: 400;
 }
 

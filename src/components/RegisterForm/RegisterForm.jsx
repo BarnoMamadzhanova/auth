@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useFormik } from "formik";
 import { registerSchema } from "../../schemas/register";
 import classes from "./RegisterForm.module.css";
@@ -8,8 +8,9 @@ import { useAppDispatch, useAppSelector } from "../../store/main";
 import { registerUser } from "../../store/auth/authReducer";
 
 function RegisterForm() {
-  const [passwordVisible, setPasswordVisible] = useState(false);
   const dispatch = useAppDispatch();
+  const navigate = useNavigate();
+  const [passwordVisible, setPasswordVisible] = useState(false);
   const { isLoading, error } = useAppSelector((state) => state.auth);
 
   const { values, errors, touched, handleBlur, handleChange, handleSubmit } =
@@ -21,22 +22,29 @@ function RegisterForm() {
         confirmPassword: "",
       },
       validationSchema: registerSchema,
-      // onSubmit: (values, actions) => {
-      //   dispatch(registerUser(values));
+      // onSubmit: async (values, actions) => {
+      //   try {
+      //     await dispatch(registerUser(values)).unwrap();
+      //     console.log("Registration successful");
+      //     navigate("/profile");
+      //   } catch (err) {
+      //     console.log("Registration failed", err);
+      //   }
       //   actions.resetForm();
       // },
+
+      // Simulate form submission
       onSubmit: (values, actions) => {
-        // Simulate form submission
         console.log("submitted");
         console.log(values);
         console.log(actions);
 
         // Simulate API call delay
         setTimeout(() => {
-          // Simulate success or error response from API
           const success = true;
           if (success) {
             console.log("Registration successful");
+            navigate("/confirmation");
           } else {
             console.log("Registration failed");
           }

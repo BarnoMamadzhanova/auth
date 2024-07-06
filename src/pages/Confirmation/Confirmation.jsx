@@ -3,11 +3,9 @@ import classes from "./Confirmation.module.css";
 import { Hero } from "../../components/Hero/Hero";
 import ConfirmationForm from "../../components/ConfirmationForm/ConfirmationForm";
 import Modal from "../../components/Modal/Modal";
-// import { useNavigate } from "react-router-dom";
 
 function Confirmation() {
   // const { token } = useParams();
-  // const navigate = useNavigate();
   const [modalActive, setModalActive] = useState(false);
   const [modalMessage, setModalMessage] = useState("");
 
