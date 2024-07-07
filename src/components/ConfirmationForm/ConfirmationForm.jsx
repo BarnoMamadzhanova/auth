@@ -1,6 +1,7 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
 import { useFormik } from "formik";
 import classes from "./ConfirmationForm.module.css";
 import { confirmSchema } from "../../schemas/confirm";
@@ -12,6 +13,7 @@ import {
 
 function ConfirmationForm({ onSubmitSuccess, onSubmitError }) {
   const dispatch = useDispatch();
+  const navigate = useNavigate();
   const { isLoading, error } = useSelector(selectAuthState);
 
   const formik = useFormik({
@@ -37,7 +39,7 @@ function ConfirmationForm({ onSubmitSuccess, onSubmitError }) {
       // Simulate success
       onSubmitSuccess();
 
-      // Simulate error (uncomment to test error case)
+      // Simulate error
       // onSubmitError();
 
       actions.resetForm();
@@ -51,10 +53,10 @@ function ConfirmationForm({ onSubmitSuccess, onSubmitError }) {
 
   return (
     <div className={classes.confirmationContainer}>
-      <Link to="/" className={classes.backLink}>
+      <button onClick={() => navigate(-1)} className={classes.backLink}>
         <img src={back} alt="back" />
         Назад
-      </Link>
+      </button>
       <p className={classes.confirmTitle}>
         Выслали письмо со ссылкой для завершения регистрации на вашу почту.
       </p>

@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { useFormik } from "formik";
 import { registerSchema } from "../../schemas/register";
 import classes from "./RegisterForm.module.css";
@@ -69,10 +69,10 @@ function RegisterForm() {
 
   return (
     <>
-      <Link to="/" className={classes.backLink}>
+      <button onClick={() => navigate(-1)} className={classes.backLink}>
         <img src={back} alt="back" />
         Назад
-      </Link>
+      </button>
       <div className={classes.registerContainer}>
         <h3 className={classes.registerFormTitle}>Создать аккаунт Lorby</h3>
         <form
