@@ -1,5 +1,8 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { AppThunk, RootState } from "../main";
+import { Dispatch } from "@reduxjs/toolkit";
+import { isTokenExpired } from "../../utils/jwt";
+import { store } from "../main";
 import {
   IRegisterRequest,
   ILoginRequest,
@@ -10,8 +13,9 @@ import {
   login,
   resendConfirmation,
   logout,
+  refreshToken,
 } from "../../api/auth/index";
-import { Dispatch } from "@reduxjs/toolkit";
+
 export interface AuthState {
   accessToken: string | null;
   isLoading: boolean;
@@ -128,6 +132,25 @@ export const logoutUser = () => async (dispatch: Dispatch) => {
     console.log(error);
   }
 };
+
+export const getAccessToken =
+  () =>
+  async (dispatch: Dispatch<any>): Promise<string | null> => {
+    try {
+      const accessToken = store.getState().auth.accessToken;
+
+      if (!accessToken || isTokenExpired(accessToken)) {
+        const res = await refreshToken();
+        dispatch(loginSuccess(res.data.accessToken));
+        return res.data.accessToken;
+      }
+
+      return accessToken;
+    } catch (e) {
+      console.error(e);
+      return null;
+    }
+  };
 
 export const selectAuthState = (state: RootState) => state.auth;
 

@@ -23,3 +23,10 @@ export interface IResendConfirmationRequest {
   username: string;
   email: string;
 }
+
+//  Refresh
+
+export interface IRefreshToken {
+  accessToken: string;
+  refreshToken: string;
+}
