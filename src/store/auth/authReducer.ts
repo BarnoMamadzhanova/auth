@@ -5,7 +5,12 @@ import {
   ILoginRequest,
   IResendConfirmationRequest,
 } from "../../api/auth/types";
-import { register, login, resendConfirmation } from "../../api/auth/index";
+import {
+  register,
+  login,
+  resendConfirmation,
+  logout,
+} from "../../api/auth/index";
 import { Dispatch } from "@reduxjs/toolkit";
 export interface AuthState {
   accessToken: string | null;
@@ -114,6 +119,15 @@ export const resendConfirmationEmail =
       dispatch(resendConfirmationFailure(error.message));
     }
   };
+
+export const logoutUser = () => async (dispatch: Dispatch) => {
+  try {
+    await logout();
+    dispatch(logoutSuccess());
+  } catch (error: any) {
+    console.log(error);
+  }
+};
 
 export const selectAuthState = (state: RootState) => state.auth;
 
