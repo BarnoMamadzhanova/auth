@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
-import { useParams } from "react-router-dom";
+// import { useParams } from "react-router-dom";
+import { useToken } from "./useToken";
 import { useAppDispatch } from "../../store/main";
 import { confirmEmail } from "../../store/auth/authReducer";
 import classes from "./Confirmation.module.css";
@@ -8,7 +9,7 @@ import ConfirmationForm from "../../components/ConfirmationForm/ConfirmationForm
 import Modal from "../../components/Modal/Modal";
 
 function Confirmation() {
-  const { token } = useParams<{ token: string }>();
+  const token = useToken();
   const dispatch = useAppDispatch();
   const [modalActive, setModalActive] = useState(false);
   const [modalMessage, setModalMessage] = useState("");
