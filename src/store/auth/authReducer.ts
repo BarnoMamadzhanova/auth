@@ -2,7 +2,6 @@ import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { AppThunk, RootState } from "../main";
 import { Dispatch } from "@reduxjs/toolkit";
 import { isTokenExpired } from "../../utils/jwt";
-import { store } from "../main";
 import {
   IRegisterRequest,
   ILoginRequest,
@@ -134,6 +133,7 @@ export const loginUser =
           refreshToken: response.data.refreshToken,
         })
       );
+      localStorage.setItem("refreshToken", response.data.refreshToken);
     } catch (error: any) {
       console.error(error);
       dispatch(loginFailure(error.message));
@@ -167,9 +167,12 @@ export const resendConfirmationEmail =
 
 export const getAccessToken =
   () =>
-  async (dispatch: Dispatch<any>): Promise<string | null> => {
+  async (
+    dispatch: Dispatch<any>,
+    getState: () => RootState
+  ): Promise<string | null> => {
     try {
-      const accessToken = store.getState().auth.accessToken;
+      const accessToken = getState().auth.accessToken;
 
       if (!accessToken || isTokenExpired(accessToken)) {
         const res = await refreshToken();
@@ -179,6 +182,7 @@ export const getAccessToken =
             refreshToken: res.data.refreshToken,
           })
         );
+        localStorage.setItem("refreshToken", res.data.refreshToken);
         return res.data.accessToken;
       }
 

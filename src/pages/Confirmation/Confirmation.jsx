@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from "react";
-// import { useParams } from "react-router-dom";
 import { useToken } from "./useToken";
 import { useAppDispatch } from "../../store/main";
 import { confirmEmail } from "../../store/auth/authReducer";

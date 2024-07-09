@@ -22,36 +22,36 @@ function RegisterForm() {
         confirmPassword: "",
       },
       validationSchema: registerSchema,
-      // onSubmit: async (values, actions) => {
-      //   try {
-      //     await dispatch(registerUser(values)).unwrap();
-      //     console.log("Registration successful");
-      //     navigate("/profile");
-      //   } catch (err) {
-      //     console.log("Registration failed", err);
-      //   }
-      //   actions.resetForm();
-      // },
-
-      // Simulate form submission
-      onSubmit: (values, actions) => {
-        console.log("submitted");
-        console.log(values);
-        console.log(actions);
-
-        // Simulate API call delay
-        setTimeout(() => {
-          const success = true;
-          if (success) {
-            console.log("Registration successful");
-            navigate("/confirmation");
-          } else {
-            console.log("Registration failed");
-          }
-        }, 1000);
-
+      onSubmit: async (values, actions) => {
+        try {
+          await dispatch(registerUser(values)).unwrap();
+          console.log("Registration successful");
+          navigate("/confirmation");
+        } catch (err) {
+          console.log("Registration failed", err);
+        }
         actions.resetForm();
       },
+
+      // Simulate form submission
+      // onSubmit: (values, actions) => {
+      //   console.log("submitted");
+      //   console.log(values);
+      //   console.log(actions);
+
+      // Simulate API call delay
+      //   setTimeout(() => {
+      //     const success = true;
+      //     if (success) {
+      //       console.log("Registration successful");
+      //       navigate("/confirmation");
+      //     } else {
+      //       console.log("Registration failed");
+      //     }
+      //   }, 1000);
+
+      //   actions.resetForm();
+      // },
       validateOnChange: false,
       validateOnBlur: false,
     });

@@ -22,28 +22,28 @@ function ConfirmationForm({ onSubmitSuccess, onSubmitError }) {
       email: "",
     },
     validationSchema: confirmSchema,
-    // onSubmit: async (values, actions) => {
-    //   try {
-    //     await dispatch(resendConfirmationEmail(values));
-    //     onSubmitSuccess();
-    //   } catch {
-    //     onSubmitError();
-    //   }
-    //   actions.resetForm();
-    // },
-    onSubmit: (values, actions) => {
-      console.log("submitted");
-      console.log(values);
-      console.log(actions);
-
-      // Simulate success
-      onSubmitSuccess();
-
-      // Simulate error
-      // onSubmitError();
-
+    onSubmit: async (values, actions) => {
+      try {
+        await dispatch(resendConfirmationEmail(values)).unwrap();
+        onSubmitSuccess();
+      } catch {
+        onSubmitError();
+      }
       actions.resetForm();
     },
+    // onSubmit: (values, actions) => {
+    //   console.log("submitted");
+    //   console.log(values);
+    //   console.log(actions);
+
+    // Simulate success
+    // onSubmitSuccess();
+
+    // Simulate error
+    // onSubmitError();
+
+    // actions.resetForm();
+    // },
     validateOnChange: true,
     validateOnBlur: true,
   });

@@ -6,12 +6,6 @@ import { useNavigate } from "react-router-dom";
 import Modal from "../../components/Modal/Modal";
 import { logoutUser } from "../../store/auth/authReducer";
 
-// Simulate logoutUser function
-// const logoutUser = () => async (dispatch) => {
-//   console.log("User logged out");
-//   dispatch(logoutSuccess());
-// };
-
 function Profile() {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
