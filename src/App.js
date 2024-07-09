@@ -21,6 +21,7 @@ function App() {
         {/* <Route path="/confirmation" element={<ProtectedConfirmation />} /> */}
         <Route path="/profile" element={<Profile />} />
         <Route path="/confirmation" element={<Confirmation />} />
+        <Route path="/confirm/:token" component={Confirmation} />
         <Route path="*" element={<Navigate to="/" />} />
       </Routes>
     </div>

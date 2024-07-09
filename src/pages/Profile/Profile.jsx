@@ -4,14 +4,13 @@ import { hero } from "../../assets";
 import { useAppDispatch } from "../../store/main";
 import { useNavigate } from "react-router-dom";
 import Modal from "../../components/Modal/Modal";
-// import { logoutUser } from "../../store/auth/authReducer";
-import { logoutSuccess } from "../../store/auth/authReducer";
+import { logoutUser } from "../../store/auth/authReducer";
 
 // Simulate logoutUser function
-const logoutUser = () => async (dispatch) => {
-  console.log("User logged out");
-  dispatch(logoutSuccess());
-};
+// const logoutUser = () => async (dispatch) => {
+//   console.log("User logged out");
+//   dispatch(logoutSuccess());
+// };
 
 function Profile() {
   const dispatch = useAppDispatch();

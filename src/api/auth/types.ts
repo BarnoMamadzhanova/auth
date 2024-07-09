@@ -30,3 +30,13 @@ export interface IRefreshToken {
   accessToken: string;
   refreshToken: string;
 }
+
+// Confirm
+export interface IConfirmRequest {
+  token: string;
+}
+
+// Logout
+export interface ILogoutRequest {
+  refreshToken: string;
+}

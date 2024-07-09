@@ -14,16 +14,19 @@ import {
   resendConfirmation,
   logout,
   refreshToken,
+  confirmEmailRequest,
 } from "../../api/auth/index";
 
 export interface AuthState {
   accessToken: string | null;
+  refreshToken: string | null;
   isLoading: boolean;
   error: string | null;
 }
 
 const initialState: AuthState = {
   accessToken: null,
+  refreshToken: null,
   isLoading: false,
   error: null,
 };
@@ -47,19 +50,18 @@ export const authReducer = createSlice({
     loginStart: (state) => {
       state.isLoading = true;
     },
-    loginSuccess: (state, action: PayloadAction<string>) => {
-      state.accessToken = action.payload;
+    loginSuccess: (
+      state,
+      action: PayloadAction<{ accessToken: string; refreshToken: string }>
+    ) => {
+      state.accessToken = action.payload.accessToken;
+      state.refreshToken = action.payload.refreshToken;
       state.isLoading = false;
       state.error = null;
     },
     loginFailure: (state, action: PayloadAction<string>) => {
       state.isLoading = false;
       state.error = action.payload;
-    },
-    logoutSuccess: (state) => {
-      state.accessToken = null;
-      state.isLoading = false;
-      state.error = null;
     },
     resendConfirmationStart: (state) => {
       state.isLoading = true;
@@ -72,6 +74,24 @@ export const authReducer = createSlice({
       state.isLoading = false;
       state.error = action.payload;
     },
+    confirmEmailStart(state) {
+      state.isLoading = true;
+      state.error = null;
+    },
+    confirmEmailSuccess(state) {
+      state.isLoading = false;
+      state.error = null;
+    },
+    confirmEmailFailure(state, action: PayloadAction<string>) {
+      state.isLoading = false;
+      state.error = action.payload;
+    },
+    logoutSuccess: (state) => {
+      state.accessToken = null;
+      state.refreshToken = null;
+      state.isLoading = false;
+      state.error = null;
+    },
   },
 });
 
@@ -82,10 +102,13 @@ export const {
   loginStart,
   loginSuccess,
   loginFailure,
-  logoutSuccess,
   resendConfirmationStart,
   resendConfirmationSuccess,
   resendConfirmationFailure,
+  confirmEmailStart,
+  confirmEmailFailure,
+  confirmEmailSuccess,
+  logoutSuccess,
 } = authReducer.actions;
 
 export const registerUser =
@@ -105,10 +128,28 @@ export const loginUser =
     try {
       dispatch(loginStart());
       const response = await login(data);
-      dispatch(loginSuccess(response.data.accessToken));
+      dispatch(
+        loginSuccess({
+          accessToken: response.data.accessToken,
+          refreshToken: response.data.refreshToken,
+        })
+      );
     } catch (error: any) {
       console.error(error);
       dispatch(loginFailure(error.message));
+    }
+  };
+
+export const confirmEmail =
+  (token: string): AppThunk =>
+  async (dispatch) => {
+    try {
+      dispatch(confirmEmailStart());
+      await confirmEmailRequest({ token });
+      dispatch(confirmEmailSuccess());
+    } catch (error: any) {
+      console.error(error);
+      dispatch(confirmEmailFailure(error.message));
     }
   };
 
@@ -124,15 +165,6 @@ export const resendConfirmationEmail =
     }
   };
 
-export const logoutUser = () => async (dispatch: Dispatch) => {
-  try {
-    await logout();
-    dispatch(logoutSuccess());
-  } catch (error: any) {
-    console.log(error);
-  }
-};
-
 export const getAccessToken =
   () =>
   async (dispatch: Dispatch<any>): Promise<string | null> => {
@@ -141,7 +173,12 @@ export const getAccessToken =
 
       if (!accessToken || isTokenExpired(accessToken)) {
         const res = await refreshToken();
-        dispatch(loginSuccess(res.data.accessToken));
+        dispatch(
+          loginSuccess({
+            accessToken: res.data.accessToken,
+            refreshToken: res.data.refreshToken,
+          })
+        );
         return res.data.accessToken;
       }
 
@@ -149,6 +186,20 @@ export const getAccessToken =
     } catch (e) {
       console.error(e);
       return null;
+    }
+  };
+
+export const logoutUser =
+  (): AppThunk => async (dispatch: Dispatch, getState: () => RootState) => {
+    try {
+      const refreshToken = getState().auth.refreshToken;
+      if (!refreshToken) {
+        throw new Error("No refresh token available");
+      }
+      await logout({ refreshToken });
+      dispatch(logoutSuccess());
+    } catch (error: any) {
+      console.log(error);
     }
   };
 
