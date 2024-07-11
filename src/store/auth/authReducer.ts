@@ -184,10 +184,10 @@ export const logoutUser =
       }
       await logout({ refreshToken: refreshToken });
       dispatch(logoutSuccess());
-      dispatch(setIsAuth(false));
       localStorage.removeItem("refreshToken");
+      dispatch(setIsAuth(false));
     } catch (error: any) {
-      console.log(error);
+      console.log("Error logging out:", error);
     }
   };
 

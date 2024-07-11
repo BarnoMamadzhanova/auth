@@ -1,4 +1,4 @@
-import axios from "axios";
+import axios, { AxiosRequestConfig } from "axios";
 import { store } from "../store/main";
 import { isTokenExpired } from "../utils/jwt";
 import { loginSuccess, logoutSuccess } from "../store/auth/authReducer";
@@ -10,18 +10,6 @@ export const axiosInstance = axios.create({
     "Content-Type": "application/json",
   },
 });
-
-// axiosInstance.interceptors.request.use(async (config) => {
-//   try {
-//     const accessToken = await store.dispatch(getAccessToken() as any);
-//     if (accessToken) {
-//       config.headers.Authorization = `Bearer ${accessToken}`;
-//     }
-//   } catch (error) {
-//     console.error("Error fetching access token", error);
-//   }
-//   return config;
-// });
 
 export const refreshAccessToken = async (): Promise<string | null> => {
   try {
@@ -55,30 +43,51 @@ export const refreshAccessToken = async (): Promise<string | null> => {
   }
 };
 
-axiosInstance.interceptors.request.use(async (config) => {
+const authMiddleware = async (
+  config: AxiosRequestConfig
+): Promise<AxiosRequestConfig> => {
   try {
-    const state = store.getState();
-    const { isAuth } = state.auth;
+    const { auth } = store.getState();
+    const { isAuth } = auth;
 
-    if (!isAuth) {
+    const nonAuthRoutes = ["/register", "/login"];
+
+    if (!config.url || (!isAuth && !nonAuthRoutes.includes(config.url))) {
       console.error("User is not authenticated. Redirecting to login.");
       window.location.href = "/login";
-      return config;
+      throw new Error("User is not authenticated.");
     }
 
     const accessToken = await refreshAccessToken();
 
     if (accessToken) {
-      config.headers.Authorization = `Bearer ${accessToken}`;
+      config.headers = {
+        ...config.headers,
+        Authorization: `Bearer ${accessToken}`,
+      };
     } else {
       console.error(
         "Access token is expired or not available. Redirecting to login."
       );
       window.location.href = "/login";
+      throw new Error("Access token is expired or not available.");
     }
   } catch (error) {
-    console.error("Error fetching access token:", error);
-    window.location.href = "/login";
+    console.error("Error in request middleware:", error);
+    throw error;
   }
+
   return config;
-});
+};
+
+const axiosRequest = async (config: AxiosRequestConfig): Promise<any> => {
+  try {
+    config = await authMiddleware(config);
+    return axiosInstance(config);
+  } catch (error) {
+    console.error("Error in Axios request:", error);
+    throw error;
+  }
+};
+
+export default axiosRequest;
