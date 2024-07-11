@@ -1,6 +1,6 @@
 import { configureStore } from "@reduxjs/toolkit";
 import { useDispatch, useSelector, TypedUseSelectorHook } from "react-redux";
-import logger from "redux-logger";
+// import logger from "redux-logger";
 import authReducer from "./auth/authReducer";
 
 export const store = configureStore({
@@ -8,9 +8,10 @@ export const store = configureStore({
     auth: authReducer,
   },
   middleware: (getDefaultMiddleware) =>
-    getDefaultMiddleware().concat(
-      ...(process.env.NODE_ENV !== "production" ? [logger] : [])
-    ),
+    getDefaultMiddleware({
+      immutableCheck: process.env.NODE_ENV !== "production",
+      serializableCheck: process.env.NODE_ENV !== "production",
+    }),
 });
 
 export type RootState = ReturnType<typeof store.getState>;

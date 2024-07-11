@@ -11,31 +11,45 @@ function RegisterForm() {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
   const [passwordVisible, setPasswordVisible] = useState(false);
-  const { isLoading, error } = useAppSelector((state) => state.auth);
+  const { isLoading } = useAppSelector((state) => state.auth);
 
-  const { values, errors, touched, handleBlur, handleChange, handleSubmit } =
-    useFormik({
-      initialValues: {
-        email: "",
-        username: "",
-        password: "",
-        confirmPassword: "",
-      },
-      validationSchema: registerSchema,
-      onSubmit: async (values, actions) => {
-        try {
-          await dispatch(registerUser(values));
-          console.log("Registration successful");
-        } catch (error) {
-          console.log("Registration failed", error);
-        } finally {
-          actions.resetForm();
-          navigate("/confirmation");
+  const {
+    values,
+    errors,
+    touched,
+    handleBlur,
+    handleChange,
+    handleSubmit,
+    setErrors,
+  } = useFormik({
+    initialValues: {
+      email: "",
+      username: "",
+      password: "",
+      confirmPassword: "",
+    },
+    validationSchema: registerSchema,
+    onSubmit: async (values, actions) => {
+      try {
+        await dispatch(registerUser(values));
+        console.log("Registration successful");
+        navigate("/confirmation");
+      } catch (error) {
+        console.log("Registration failed", error);
+        let errorMessage = "Registration failed";
+        if (error.status === 400) {
+          errorMessage = "Недопустимые входные данные";
+        } else if (error.status === 409) {
+          errorMessage = "Пользователь уже существует";
         }
-      },
-      validateOnChange: false,
-      validateOnBlur: false,
-    });
+        setErrors({ submit: errorMessage });
+      } finally {
+        actions.resetForm();
+      }
+    },
+    validateOnChange: false,
+    validateOnBlur: false,
+  });
 
   const togglePasswordVisibility = () => {
     setPasswordVisible(!passwordVisible);
@@ -195,7 +209,9 @@ function RegisterForm() {
           <button type="submit" onSubmit={handleSubmit} disabled={isLoading}>
             Далее
           </button>
-          {error && <div className={classes.errorMessage}>{error}</div>}
+          {errors.submit && (
+            <div className={classes.errorMessage}>{errors.submit}</div>
+          )}
         </form>
       </div>
     </>

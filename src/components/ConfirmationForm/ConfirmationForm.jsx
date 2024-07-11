@@ -38,6 +38,23 @@ function ConfirmationForm({ onSubmitSuccess, onSubmitError }) {
   const { values, errors, touched, handleBlur, handleChange, handleSubmit } =
     formik;
 
+  let errorMessage = "";
+  if (error) {
+    switch (error.status) {
+      case 400:
+        errorMessage = "Неверный адрес электронной почты";
+        break;
+      case 409:
+        errorMessage = "Пользователь уже подтвержден";
+        break;
+      case 502:
+        errorMessage = "Не удалось отправить письмо";
+        break;
+      default:
+        errorMessage = "Произошла ошибка, попробуйте снова";
+    }
+  }
+
   return (
     <div className={classes.confirmationContainer}>
       <button onClick={() => navigate(-1)} className={classes.backLink}>
@@ -45,7 +62,8 @@ function ConfirmationForm({ onSubmitSuccess, onSubmitError }) {
         Назад
       </button>
       <p className={classes.confirmTitle}>
-        Выслали письмо со ссылкой для завершения регистрации на вашу почту.
+        Проверьте пожалуйста почту, мы выслали вам письмо для подтверждения
+        регистрации. После подтверждения почты можете авторизоваться))
       </p>
       <p className={classes.confirmText}>
         Если письмо не пришло, то пожалуйста заполните форму
@@ -91,7 +109,7 @@ function ConfirmationForm({ onSubmitSuccess, onSubmitError }) {
         <button onSubmit={handleSubmit} type="submit">
           {isLoading ? "Отправка..." : "Письмо не пришло"}
         </button>
-        {error && <div className={classes.errorMessage}>{error}</div>}
+        {error && <div className={classes.errorMessage}>{errorMessage}</div>}
       </form>
       <Link to="/" className={classes.confirmLink}>
         Авторизоваться

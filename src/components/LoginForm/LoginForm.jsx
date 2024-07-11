@@ -4,7 +4,7 @@ import { useFormik } from "formik";
 import { loginSchema } from "../../schemas/login";
 import classes from "./LoginForm.module.css";
 import { visible, invisible } from "../../assets";
-import { useAppDispatch } from "../../store/main";
+import { useAppDispatch, useAppSelector } from "../../store/main";
 import { loginUser } from "../../store/auth/authReducer";
 
 function LoginForm() {
@@ -12,6 +12,7 @@ function LoginForm() {
   const [formError, setFormError] = useState("");
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
+  const { error } = useAppSelector((state) => state.auth);
 
   const formik = useFormik({
     initialValues: {
@@ -49,6 +50,21 @@ function LoginForm() {
       }
     }
   };
+
+  const getErrorMessage = () => {
+    if (!error) return "";
+
+    switch (error.status) {
+      case 400:
+        return "Неверный логин или пароль";
+      case 401:
+        return "Аккаунт не активирован. Подтвердите свою почту";
+      default:
+        return "Произошла ошибка. Пожалуйста, попробуйте снова";
+    }
+  };
+
+  const errorMessage = getErrorMessage();
 
   return (
     <div className={classes.loginContainer}>
@@ -102,6 +118,9 @@ function LoginForm() {
         >
           Войти
         </button>
+        {errorMessage && (
+          <div className={classes.formErrorMessage}>{errorMessage}</div>
+        )}
       </form>
       <Link to="/registration" className={classes.loginFormText}>
         У меня еще нет аккаунта

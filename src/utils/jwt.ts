@@ -1,12 +1,8 @@
-import { getUnixTime } from "./date";
-
 export interface IAuthTokenInfo {
   exp: number;
   iat: number;
   login: string;
 }
-
-const LIFE_TIME_TO_UPDATE_MULTIPLIER = 0.8;
 
 export const isTokenExpired = (token: string | null): boolean => {
   if (!token) {
@@ -15,14 +11,10 @@ export const isTokenExpired = (token: string | null): boolean => {
 
   try {
     const tokenInfo = token.split(".")[1];
-    const tokenInfoDecoded = window.atob(tokenInfo);
-    const { exp, iat }: IAuthTokenInfo = JSON.parse(tokenInfoDecoded);
+    const tokenInfoDecoded = JSON.parse(atob(tokenInfo));
+    const { exp }: IAuthTokenInfo = tokenInfoDecoded;
 
-    const tokenLeftTime = exp - getUnixTime();
-
-    const minLifeTimeForUpdate = (exp - iat) * LIFE_TIME_TO_UPDATE_MULTIPLIER;
-
-    return tokenLeftTime < minLifeTimeForUpdate;
+    return exp < Math.floor(new Date().getTime() / 1000) + 10;
   } catch (e) {
     console.error(e);
     return true;

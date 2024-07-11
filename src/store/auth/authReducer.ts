@@ -1,7 +1,6 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { AppThunk, RootState } from "../main";
 import { Dispatch } from "@reduxjs/toolkit";
-import { isTokenExpired } from "../../utils/jwt";
 import {
   IRegisterRequest,
   ILoginRequest,
@@ -12,11 +11,11 @@ import {
   login,
   resendConfirmation,
   logout,
-  refreshAccessToken,
   confirmEmailRequest,
 } from "../../api/auth/index";
 
 export interface AuthState {
+  isAuth: boolean;
   accessToken: string | null;
   refreshToken: string | null;
   isLoading: boolean;
@@ -24,6 +23,7 @@ export interface AuthState {
 }
 
 const initialState: AuthState = {
+  isAuth: false,
   accessToken: null,
   refreshToken: null,
   isLoading: false,
@@ -61,6 +61,9 @@ export const authReducer = createSlice({
     loginFailure: (state, action: PayloadAction<string>) => {
       state.isLoading = false;
       state.error = action.payload;
+    },
+    setIsAuth(state, action: PayloadAction<boolean>) {
+      state.isAuth = action.payload;
     },
     resendConfirmationStart: (state) => {
       state.isLoading = true;
@@ -101,6 +104,7 @@ export const {
   loginStart,
   loginSuccess,
   loginFailure,
+  setIsAuth,
   resendConfirmationStart,
   resendConfirmationSuccess,
   resendConfirmationFailure,
@@ -119,6 +123,7 @@ export const registerUser =
       dispatch(registerSuccess());
     } catch (error: any) {
       dispatch(registerFailure(error.message));
+      throw { message: error.message, status: error.response?.status };
     }
   };
 
@@ -134,10 +139,12 @@ export const loginUser =
           refreshToken,
         })
       );
+      dispatch(setIsAuth(true));
       localStorage.setItem("refreshToken", refreshToken);
     } catch (error: any) {
       console.error(error);
       dispatch(loginFailure(error.message));
+      throw { message: error.message, status: error.response?.status };
     }
   };
 
@@ -151,6 +158,7 @@ export const confirmEmail =
     } catch (error: any) {
       console.error(error);
       dispatch(confirmEmailFailure(error.message));
+      throw { message: error.message, status: error.response?.status };
     }
   };
 
@@ -166,44 +174,6 @@ export const resendConfirmationEmail =
     }
   };
 
-export const getAccessToken =
-  () =>
-  async (
-    dispatch: Dispatch<any>,
-    getState: () => RootState
-  ): Promise<string | null> => {
-    try {
-      let { accessToken, refreshToken } = getState().auth;
-
-      if (!refreshToken) {
-        refreshToken = localStorage.getItem("refreshToken") || "";
-      }
-
-      if (!accessToken || isTokenExpired(accessToken)) {
-        if (!refreshToken) {
-          throw new Error("No refresh token available");
-        }
-        const res = await refreshAccessToken({ refreshToken });
-        console.log("Refreshed tokens:", res.data);
-        accessToken = res.data.accessToken;
-        accessToken = res.data.accessToken;
-        refreshToken = res.data.refreshToken;
-        dispatch(
-          loginSuccess({
-            accessToken,
-            refreshToken,
-          })
-        );
-        localStorage.setItem("refreshToken", refreshToken);
-      }
-
-      return accessToken;
-    } catch (e) {
-      console.error(e);
-      return null;
-    }
-  };
-
 export const logoutUser =
   (): AppThunk => async (dispatch: Dispatch, getState: () => RootState) => {
     try {
@@ -214,6 +184,7 @@ export const logoutUser =
       }
       await logout({ refreshToken: refreshToken });
       dispatch(logoutSuccess());
+      dispatch(setIsAuth(false));
       localStorage.removeItem("refreshToken");
     } catch (error: any) {
       console.log(error);
