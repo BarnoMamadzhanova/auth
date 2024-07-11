@@ -173,19 +173,19 @@ export const getAccessToken =
     getState: () => RootState
   ): Promise<string | null> => {
     try {
-      let accessToken = getState().auth.accessToken;
-      let refreshToken = getState().auth.refreshToken;
+      let { accessToken, refreshToken } = getState().auth;
 
       if (!refreshToken) {
-        refreshToken = localStorage.getItem("refreshToken");
+        refreshToken = localStorage.getItem("refreshToken") || "";
       }
 
       if (!accessToken || isTokenExpired(accessToken)) {
         if (!refreshToken) {
           throw new Error("No refresh token available");
         }
-        const res = await await refreshAccessToken({ refreshToken });
+        const res = await refreshAccessToken({ refreshToken });
         console.log("Refreshed tokens:", res.data);
+        accessToken = res.data.accessToken;
         accessToken = res.data.accessToken;
         refreshToken = res.data.refreshToken;
         dispatch(
@@ -207,12 +207,14 @@ export const getAccessToken =
 export const logoutUser =
   (): AppThunk => async (dispatch: Dispatch, getState: () => RootState) => {
     try {
-      const refreshToken = getState().auth.refreshToken;
+      const refreshToken =
+        getState().auth.refreshToken || localStorage.getItem("refreshToken");
       if (!refreshToken) {
         throw new Error("No refresh token available");
       }
-      await logout({ refreshToken });
+      await logout({ refreshToken: refreshToken });
       dispatch(logoutSuccess());
+      localStorage.removeItem("refreshToken");
     } catch (error: any) {
       console.log(error);
     }

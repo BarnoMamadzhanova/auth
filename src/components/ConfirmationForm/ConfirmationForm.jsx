@@ -24,7 +24,7 @@ function ConfirmationForm({ onSubmitSuccess, onSubmitError }) {
     validationSchema: confirmSchema,
     onSubmit: async (values, actions) => {
       try {
-        await dispatch(resendConfirmationEmail(values)).unwrap();
+        await dispatch(resendConfirmationEmail(values));
         onSubmitSuccess();
       } catch {
         onSubmitError();

@@ -39,7 +39,7 @@ function LoginForm() {
     } else {
       try {
         console.log("Form submitted with values:", values);
-        await dispatch(loginUser(values)).unwrap();
+        await dispatch(loginUser(values));
         setFormError("");
         formik.resetForm();
         navigate("/profile");
