@@ -9,14 +9,6 @@ export const axiosInstance = axios.create({
   },
 });
 
-// axiosInstance.interceptors.request.use(async (config) => {
-//   const accessToken = await store.dispatch(getAccessToken() as any);
-//   if (accessToken) {
-//     config.headers.Authorization = `Bearer ${accessToken}`;
-//   }
-//   return config;
-// });
-
 axiosInstance.interceptors.request.use(async (config) => {
   try {
     const accessToken = await store.dispatch(getAccessToken() as any);

@@ -31,19 +31,6 @@ function ConfirmationForm({ onSubmitSuccess, onSubmitError }) {
       }
       actions.resetForm();
     },
-    // onSubmit: (values, actions) => {
-    //   console.log("submitted");
-    //   console.log(values);
-    //   console.log(actions);
-
-    // Simulate success
-    // onSubmitSuccess();
-
-    // Simulate error
-    // onSubmitError();
-
-    // actions.resetForm();
-    // },
     validateOnChange: true,
     validateOnBlur: true,
   });
