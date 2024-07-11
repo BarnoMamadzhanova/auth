@@ -2,7 +2,7 @@ import { login } from "./login";
 import { register } from "./register";
 import { resendConfirmation } from "./resendConfirmation";
 import { logout } from "./logout";
-import { refreshToken } from "./refresh";
+import { refreshAccessToken } from "./refresh";
 import { confirmEmailRequest } from "./confirm";
 
 export {
@@ -10,6 +10,6 @@ export {
   register,
   resendConfirmation,
   logout,
-  refreshToken,
+  refreshAccessToken,
   confirmEmailRequest,
 };

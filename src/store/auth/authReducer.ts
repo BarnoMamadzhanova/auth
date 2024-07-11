@@ -12,7 +12,7 @@ import {
   login,
   resendConfirmation,
   logout,
-  refreshToken,
+  refreshAccessToken,
   confirmEmailRequest,
 } from "../../api/auth/index";
 
@@ -127,13 +127,14 @@ export const loginUser =
     try {
       dispatch(loginStart());
       const response = await login(data);
+      const { accessToken, refreshToken } = response.data;
       dispatch(
         loginSuccess({
-          accessToken: response.data.accessToken,
-          refreshToken: response.data.refreshToken,
+          accessToken,
+          refreshToken,
         })
       );
-      localStorage.setItem("refreshToken", response.data.refreshToken);
+      localStorage.setItem("refreshToken", refreshToken);
     } catch (error: any) {
       console.error(error);
       dispatch(loginFailure(error.message));
@@ -172,18 +173,28 @@ export const getAccessToken =
     getState: () => RootState
   ): Promise<string | null> => {
     try {
-      const accessToken = getState().auth.accessToken;
+      let accessToken = getState().auth.accessToken;
+      let refreshToken = getState().auth.refreshToken;
+
+      if (!refreshToken) {
+        refreshToken = localStorage.getItem("refreshToken");
+      }
 
       if (!accessToken || isTokenExpired(accessToken)) {
-        const res = await refreshToken();
+        if (!refreshToken) {
+          throw new Error("No refresh token available");
+        }
+        const res = await await refreshAccessToken({ refreshToken });
+        console.log("Refreshed tokens:", res.data);
+        accessToken = res.data.accessToken;
+        refreshToken = res.data.refreshToken;
         dispatch(
           loginSuccess({
-            accessToken: res.data.accessToken,
-            refreshToken: res.data.refreshToken,
+            accessToken,
+            refreshToken,
           })
         );
-        localStorage.setItem("refreshToken", res.data.refreshToken);
-        return res.data.accessToken;
+        localStorage.setItem("refreshToken", refreshToken);
       }
 
       return accessToken;
@@ -210,31 +221,3 @@ export const logoutUser =
 export const selectAuthState = (state: RootState) => state.auth;
 
 export default authReducer.reducer;
-
-// const registerFetch = createAsyncThunk(
-//   "auth/registerFetch",
-//   async (data: IRegisterRequest, thunkAPI) => {
-//     try {
-//       const response = await register(data);
-//       return response.data;
-//     } catch (error: any) {
-//       return thunkAPI.rejectWithValue(error.response.data as string);
-//     }
-//   }
-// );
-
-// extraReducers: (builder) => {
-//   // Add reducers for additional action types here, and handle loading state as needed
-//   builder.addCase(registerFetch.pending, (state, action) => {
-//     state.isLoading = true;
-//     state.error = null;
-//   });
-//   builder.addCase(registerFetch.fulfilled, (state, action) => {
-//     state.isLoading = false;
-//     state.error = null;
-//   });
-//   builder.addCase(registerFetch.rejected, (state, action) => {
-//     state.isLoading = false;
-//     state.error = action.payload;
-//   });
-// },
