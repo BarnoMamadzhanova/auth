@@ -5,3 +5,24 @@
   justify-content: center;
   font-family: "M PLUS 1p", sans-serif;
 }
+
+/* Media query for max-width 1200px */
+@media (max-width: 1200px) {
+  .registration {
+    padding-block: 11rem;
+    padding-inline: 1rem;
+  }
+}
+
+/* Media query for max-width 800px */
+@media (max-width: 800px) {
+  .registration {
+    padding-block: 5rem;
+    padding-inline: 2rem;
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+    align-items: center;
+    justify-content: center;
+  }
+}
