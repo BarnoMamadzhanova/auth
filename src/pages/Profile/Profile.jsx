@@ -17,7 +17,6 @@ function Profile() {
 
   const handleLogout = async () => {
     await dispatch(logoutUser());
-    console.log("Navigating to main page");
     navigate("/");
   };
 
